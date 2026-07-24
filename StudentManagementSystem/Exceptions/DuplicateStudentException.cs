@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace StudentManagementSystem.Exceptions
 {
-    internal class DuplicateStudentException
+    internal class DuplicateStudentException : Exception
     {
+        public DuplicateStudentException(string message) : base(message)
+        {
+        }
     }
 }

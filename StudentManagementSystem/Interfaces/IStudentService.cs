@@ -12,7 +12,7 @@ namespace StudentManagementSystem.Interfaces
         void AddStudent(Student student);
         void UpdateStudent(Student updatedStudent);
         void DeleteStudent(int rollNumber);
-        Student? GetStudentByRollNumber(int rollNumber);
+        Student GetStudentByRollNumber(int rollNumber);
         List<Student> SearchStudentsByName(string name);
         List<Student> GetAllStudents();
         void SaveToFile(string filePath);

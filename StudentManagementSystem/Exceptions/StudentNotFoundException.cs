@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace StudentManagementSystem.Exceptions
 {
-    internal class StudentNotFoundException
+    internal class StudentNotFoundException : Exception
     {
+        public StudentNotFoundException(string message) : base(message)
+        {
+        }
     }
 }

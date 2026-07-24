@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace StudentManagementSystem.Exceptions
 {
-    internal class InvalidAgeException : Exception
+    internal class InvalidPercentageException : Exception
     {
-        public InvalidAgeException(string meessage) : base(meessage)
+        public InvalidPercentageException(string message) : base(message)
         {
         }
     }
