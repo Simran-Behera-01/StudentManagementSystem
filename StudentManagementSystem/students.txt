@@ -1,0 +1,2 @@
+1,1,Sumit Gaur,24,CSE,sumit@gmail.com,1234567890,95
+2,2,Simran Behera,22,CSE,simran@gmail.com,0987654321,95

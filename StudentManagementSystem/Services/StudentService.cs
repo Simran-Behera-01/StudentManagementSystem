@@ -1,6 +1,7 @@
 ﻿using StudentManagementSystem.Common;
 using StudentManagementSystem.Constants;
 using StudentManagementSystem.Data;
+using StudentManagementSystem.Delegates;
 using StudentManagementSystem.Exceptions;
 using StudentManagementSystem.Interfaces;
 using StudentManagementSystem.Models;

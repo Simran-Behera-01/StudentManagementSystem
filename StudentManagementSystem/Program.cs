@@ -1,4 +1,5 @@
 ﻿using StudentManagementSystem.Constants;
+using StudentManagementSystem.Delegates;
 using StudentManagementSystem.Interfaces;
 using StudentManagementSystem.Models;
 using StudentManagementSystem.Services;
@@ -8,11 +9,13 @@ namespace StudentManagementSystem
 {
     internal class Program
     {
-        static private readonly IStudentService _studentService = new StudentService();    
+        static private readonly IStudentService _studentService = new StudentService();
         static void Main(string[] args)
         {
+            FileHelper.fileLoadedHandler = DisplayFileLoadedMessage;
+            FileHelper.fileSavedHandler = DisplayFileSavedMessage;
             Console.WriteLine("Student Management System");
-            _studentService.LoadFromFile("students.txt");
+            _studentService.LoadFromFile("D:\\.NET\\StudentManagementSystem\\StudentManagementSystem\\Students.txt");
             while (true)
             {
                 try
@@ -78,7 +81,7 @@ namespace StudentManagementSystem
                             break;
                         case 7:
                             Console.WriteLine("Exiting...");
-                            _studentService.SaveToFile("students.txt");
+                            _studentService.SaveToFile("D:\\.NET\\StudentManagementSystem\\StudentManagementSystem\\Students.txt");
                             return;
                         default:
                             Console.WriteLine(Messages.Error.InvalidInput);
@@ -90,6 +93,14 @@ namespace StudentManagementSystem
                     Console.WriteLine($"Error: {ex.Message}");
                 }
             }
+        }
+        public static void DisplayFileLoadedMessage()
+        {
+            Console.WriteLine("Student data loaded from file.");
+        }
+        public static void DisplayFileSavedMessage()
+        {
+            Console.WriteLine("Student data saved to file.");
         }
     }
 }

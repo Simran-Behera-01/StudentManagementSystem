@@ -1,4 +1,5 @@
 ﻿using StudentManagementSystem.Data;
+using StudentManagementSystem.Delegates;
 using StudentManagementSystem.Models;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,9 @@ namespace StudentManagementSystem.Utilities
 {
     internal static class FileHelper
     {
+        public static FileLoadedHandler fileLoadedHandler;
+        public static FileSavedHandler fileSavedHandler;
+
         public static void Save(string filePath, List<Student> students)
         {
             using (StreamWriter writer = new StreamWriter(filePath))
@@ -20,6 +24,7 @@ namespace StudentManagementSystem.Utilities
                     writer.WriteLine($"{student.Id},{student.RollNumber},{student.FirstName} {student.LastName},{student.Age},{student.Department},{student.Email},{student.PhoneNumber},{student.Percentage}");
                 }
             }
+            fileSavedHandler?.Invoke();
         }
         public static void Load(string filePath, List<Student> students) 
         {
@@ -36,6 +41,7 @@ namespace StudentManagementSystem.Utilities
                     }
                 }
             }
+            fileLoadedHandler?.Invoke();
         }
     }
 }
