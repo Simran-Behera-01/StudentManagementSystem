@@ -1,4 +1,5 @@
-﻿using StudentManagementSystem.Constants;
+﻿using StudentManagementSystem.Common;
+using StudentManagementSystem.Constants;
 using StudentManagementSystem.Data;
 using StudentManagementSystem.Exceptions;
 using StudentManagementSystem.Interfaces;
@@ -48,40 +49,68 @@ namespace StudentManagementSystem.Services
             }
         }
 
-        public void AddStudent(Student student)
+        public Result<Student> AddStudent(Student student)
         {
-
-            var students = studentRepository.GetAllStudents();
-            ValidateDuplicateStudent(student.RollNumber, student.Id);
-            ValidateStudent(student);
-
-            students.Add(student);
-        }
-
-        public void DeleteStudent(int rollNumber)
-        {
-            var students = studentRepository.GetAllStudents();
-            Student? studentToDelete = FindStudentByRollNumber(rollNumber);
-            if (studentToDelete == null)
+            try
             {
-                throw new StudentNotFoundException(Messages.Error.StudentNotFound);
+                var students = studentRepository.GetAllStudents();
+                ValidateDuplicateStudent(student.RollNumber, student.Id);
+                ValidateStudent(student);
+                students.Add(student);
+                return Result<Student>.Success(student, Messages.Success.StudentAdded);
             }
-            students.Remove(studentToDelete);
-        }
-
-        public List<Student> GetAllStudents()
-        {
-            return studentRepository.GetAllStudents();
-        }
-
-        public Student GetStudentByRollNumber(int rollNumber)
-        {
-            Student? student = FindStudentByRollNumber(rollNumber);
-            if (student == null)
+            catch (Exception ex)
             {
-                throw new StudentNotFoundException(Messages.Error.StudentNotFound);
+                return Result<Student>.Failure(ex.Message);
             }
-            return student;
+        }
+
+        public Result<Student> DeleteStudent(int rollNumber)
+        {
+            try
+            {
+                var students = studentRepository.GetAllStudents();
+                Student? studentToDelete = FindStudentByRollNumber(rollNumber);
+                if (studentToDelete == null)
+                {
+                    throw new StudentNotFoundException(Messages.Error.StudentNotFound);
+                }
+                students.Remove(studentToDelete);
+                return Result<Student>.Success(studentToDelete, Messages.Success.StudentDeleted);
+            }
+            catch (Exception ex)
+            {
+                return Result<Student>.Failure(ex.Message);
+            }
+        }
+
+        public Result<List<Student>> GetAllStudents()
+        {
+            try
+            {
+                return Result<List<Student>>.Success(studentRepository.GetAllStudents(), null);
+            }
+            catch (Exception ex)
+            {
+                return Result<List<Student>>.Failure(ex.Message);
+            }
+        }
+
+        public Result<Student> GetStudentByRollNumber(int rollNumber)
+        {
+            try
+            {
+                Student? student = FindStudentByRollNumber(rollNumber);
+                if (student == null)
+                {
+                    throw new StudentNotFoundException(Messages.Error.StudentNotFound);
+                }
+                return Result<Student>.Success(student, null);
+            }
+            catch (Exception ex)
+            {
+                return Result<Student>.Failure(ex.Message);
+            }
         }
 
         public void LoadFromFile(string filePath)
@@ -96,36 +125,51 @@ namespace StudentManagementSystem.Services
             FileHelper.Save(filePath, students);
         }
 
-        public List<Student> SearchStudentsByName(string name)
+        public Result<List<Student>> SearchStudentsByName(string name)
         {
-            var students = studentRepository.GetAllStudents();
-            var nameParts = name.Split(" ");
-            var result = new List<Student>();
-            foreach (var student in students)
+            try
             {
-                if (nameParts[0].Trim().ToLower() == student.FirstName.ToLower() || (nameParts.Length == 2 && nameParts[1].Trim().ToLower() == student.LastName.ToLower()))
+                var students = studentRepository.GetAllStudents();
+                var nameParts = name.Split(" ");
+                var result = new List<Student>();
+                foreach (var student in students)
                 {
-                    result.Add(student);
+                    if (nameParts[0].Trim().ToLower() == student.FirstName.ToLower() || (nameParts.Length == 2 && nameParts[1].Trim().ToLower() == student.LastName.ToLower()))
+                    {
+                        result.Add(student);
+                    }
                 }
+                return Result<List<Student>>.Success(result, null);
             }
-            return result;
+            catch (Exception ex)
+            {
+                return Result<List<Student>>.Failure(ex.Message);
+            }
         }
 
-        public void UpdateStudent(Student updatedStudent)
+        public Result<Student> UpdateStudent(Student updatedStudent)
         {
-            ValidateStudent(updatedStudent);
-
-            Student? student = FindStudentByRollNumber(updatedStudent.RollNumber);
-            if (student == null)
+            try
             {
-                throw new StudentNotFoundException(Messages.Error.StudentNotFound);
+                ValidateStudent(updatedStudent);
+
+                Student? student = FindStudentByRollNumber(updatedStudent.RollNumber);
+                if (student == null)
+                {
+                    throw new StudentNotFoundException(Messages.Error.StudentNotFound);
+                }
+                student.FirstName = updatedStudent.FirstName;
+                student.LastName = updatedStudent.LastName;
+                student.Department = updatedStudent.Department;
+                student.Email = updatedStudent.Email;
+                student.PhoneNumber = updatedStudent.PhoneNumber;
+                student.Percentage = updatedStudent.Percentage;
+                return Result<Student>.Success(student, Messages.Success.StudentUpdated);
             }
-            student.FirstName = updatedStudent.FirstName;
-            student.LastName = updatedStudent.LastName;
-            student.Department = updatedStudent.Department;
-            student.Email = updatedStudent.Email;
-            student.PhoneNumber = updatedStudent.PhoneNumber;
-            student.Percentage = updatedStudent.Percentage; 
+            catch (Exception ex)
+            {
+                return Result<Student>.Failure(ex.Message);
+            }
         }
     }
 }
