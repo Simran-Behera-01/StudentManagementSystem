@@ -2,6 +2,7 @@
 using StudentManagementSystem.Exceptions;
 using StudentManagementSystem.Interfaces;
 using StudentManagementSystem.Models;
+using StudentManagementSystem.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,18 +29,10 @@ namespace StudentManagementSystem.Services
         }
         private void ValidateStudent(Student student)
         {
-            if (student.Age < 18)
-            {
-                throw new InvalidAgeException("Student age must be 18 or above.");
-            }
-            if (student.Percentage < 0 || student.Percentage > 100)
-            {
-                throw new InvalidPercentageException("Percentage value should be between 0 and 100.");
-            }
-            if (!Regex.IsMatch(student.PhoneNumber,@"^\d{10}$"))
-            {
-                throw new InvalidPhoneNumberException("Give valid phone number.");
-            }
+            if(!ValidationHelper.ValidateEmail(student.Email)) throw new InvalidEmailException("Invalid email format.");
+            if(!ValidationHelper.ValidateAge(student.Age)) throw new InvalidAgeException("Age should be 18 or above.");
+            if(!ValidationHelper.ValidatePercentage(student.Percentage)) throw new InvalidPercentageException("Percentage value should be between 0 and 100.");
+            if(!ValidationHelper.ValidatePhoneNumber(student.PhoneNumber)) throw new InvalidPhoneNumberException("Give valid phone number.");
         }
 
         private void ValidateDuplicateStudent(int rollNumber,int id)
@@ -92,34 +85,14 @@ namespace StudentManagementSystem.Services
 
         public void LoadFromFile(string filePath)
         {
-            using(StreamReader reader = new StreamReader(filePath))
-            {
-                var students = studentRepository.GetAllStudents();
-                while (!reader.EndOfStream)
-                {
-                    var line = reader.ReadLine();
-                    if(line != null)
-                    {
-                        var studentDetails = line.Split(",");
-                        Student student = new Student(int.Parse(studentDetails[0].Trim()), studentDetails[2].Split(" ")[0].Trim(), studentDetails[2].Split(" ")[1].Trim(), int.Parse(studentDetails[3].Trim()), int.Parse(studentDetails[1].Trim()), studentDetails[4].Trim(), studentDetails[5].Trim(), studentDetails[6].Trim(), double.Parse(studentDetails[7].Trim()));
-                        students.Add(student);
-                    }
-                }
-
-            }
-
+            var students = studentRepository.GetAllStudents();
+            FileHelper.Load(filePath, students);
         }
 
         public void SaveToFile(string filePath)
         {
             var students = studentRepository.GetAllStudents();
-            using (StreamWriter writer = new StreamWriter(filePath))
-            {
-                foreach (var student in students)
-                {
-                    writer.WriteLine($"{student.Id},{student.RollNumber},{student.FirstName} {student.LastName},{student.Age},{student.Department},{student.Email},{student.PhoneNumber},{student.Percentage}");
-                }
-            }
+            FileHelper.Save(filePath, students);
         }
 
         public List<Student> SearchStudentsByName(string name)
