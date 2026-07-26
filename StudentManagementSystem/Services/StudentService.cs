@@ -1,4 +1,5 @@
-﻿using StudentManagementSystem.Data;
+﻿using StudentManagementSystem.Constants;
+using StudentManagementSystem.Data;
 using StudentManagementSystem.Exceptions;
 using StudentManagementSystem.Interfaces;
 using StudentManagementSystem.Models;
@@ -29,10 +30,10 @@ namespace StudentManagementSystem.Services
         }
         private void ValidateStudent(Student student)
         {
-            if(!ValidationHelper.ValidateEmail(student.Email)) throw new InvalidEmailException("Invalid email format.");
-            if(!ValidationHelper.ValidateAge(student.Age)) throw new InvalidAgeException("Age should be 18 or above.");
-            if(!ValidationHelper.ValidatePercentage(student.Percentage)) throw new InvalidPercentageException("Percentage value should be between 0 and 100.");
-            if(!ValidationHelper.ValidatePhoneNumber(student.PhoneNumber)) throw new InvalidPhoneNumberException("Give valid phone number.");
+            if(!ValidationHelper.ValidateEmail(student.Email)) throw new InvalidEmailException(Messages.Validation.InvalidEmail);
+            if(!ValidationHelper.ValidateAge(student.Age)) throw new InvalidAgeException(Messages.Validation.InvalidAge);
+            if(!ValidationHelper.ValidatePercentage(student.Percentage)) throw new InvalidPercentageException(Messages.Validation.InvalidPercentage);
+            if(!ValidationHelper.ValidatePhoneNumber(student.PhoneNumber)) throw new InvalidPhoneNumberException(Messages.Validation.InvalidPhoneNumber);
         }
 
         private void ValidateDuplicateStudent(int rollNumber,int id)
@@ -42,7 +43,7 @@ namespace StudentManagementSystem.Services
             {
                 if (student.RollNumber == rollNumber || student.Id == id)
                 {
-                    throw new DuplicateStudentException("A student with this roll number/id already exists.");
+                    throw new DuplicateStudentException(Messages.Error.DuplicateStudent);
                 }
             }
         }
@@ -63,7 +64,7 @@ namespace StudentManagementSystem.Services
             Student? studentToDelete = FindStudentByRollNumber(rollNumber);
             if (studentToDelete == null)
             {
-                throw new StudentNotFoundException("Student with the given roll number was not found.");
+                throw new StudentNotFoundException(Messages.Error.StudentNotFound);
             }
             students.Remove(studentToDelete);
         }
@@ -78,7 +79,7 @@ namespace StudentManagementSystem.Services
             Student? student = FindStudentByRollNumber(rollNumber);
             if (student == null)
             {
-                throw new StudentNotFoundException("Student with the given roll number was not found.");
+                throw new StudentNotFoundException(Messages.Error.StudentNotFound);
             }
             return student;
         }
@@ -117,7 +118,7 @@ namespace StudentManagementSystem.Services
             Student? student = FindStudentByRollNumber(updatedStudent.RollNumber);
             if (student == null)
             {
-                throw new StudentNotFoundException("Student with the given roll number was not found.");
+                throw new StudentNotFoundException(Messages.Error.StudentNotFound);
             }
             student.FirstName = updatedStudent.FirstName;
             student.LastName = updatedStudent.LastName;

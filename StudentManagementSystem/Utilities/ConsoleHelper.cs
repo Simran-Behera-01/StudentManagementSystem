@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StudentManagementSystem.Constants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace StudentManagementSystem.Utilities
                 {
                     return value;
                 }
-                Console.WriteLine("Invalid input. Please try again.");
+                Console.WriteLine(Messages.Error.InvalidInput);
             } 
         }
         public static double ReadDouble()
@@ -27,7 +28,7 @@ namespace StudentManagementSystem.Utilities
                 {
                     return value;
                 }
-                Console.WriteLine("Invalid input. Please try again.");
+                Console.WriteLine(Messages.Error.InvalidInput);
             }
         }
         public static string ReadString()
@@ -39,7 +40,7 @@ namespace StudentManagementSystem.Utilities
                 {
                     return input;
                 }
-                Console.WriteLine("Invalid input. Please try again.");
+                Console.WriteLine(Messages.Error.InvalidInput);
             }
         }
 
