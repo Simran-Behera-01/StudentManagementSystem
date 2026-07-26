@@ -19,6 +19,7 @@ namespace StudentManagementSystem.Constants
             public const string InvalidInput = "Invalid input. Please try again.";
             public const string StudentNotFound = "Student Not Found.";
             public const string DuplicateStudent = "A student with this roll number/id already exists.";
+            public const string NoDataFound = "No data found.";
         }
         public static class Validation 
         {
