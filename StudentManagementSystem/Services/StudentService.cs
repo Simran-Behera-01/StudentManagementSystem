@@ -89,6 +89,11 @@ namespace StudentManagementSystem.Services
         {
             try
             {
+                var students = studentRepository.GetAllStudents();
+                if (students.Count == 0)
+                {
+                    return Result<List<Student>>.Failure(Messages.Error.NoDataFound);
+                }
                 return Result<List<Student>>.Success(studentRepository.GetAllStudents(), null);
             }
             catch (Exception ex)
@@ -135,10 +140,18 @@ namespace StudentManagementSystem.Services
                 var result = new List<Student>();
                 foreach (var student in students)
                 {
-                    if (nameParts[0].Trim().ToLower() == student.FirstName.ToLower() || (nameParts.Length == 2 && nameParts[1].Trim().ToLower() == student.LastName.ToLower()))
+                    if ((nameParts.Length == 1 && string.Equals(nameParts[0].Trim(),student.FirstName,StringComparison.OrdinalIgnoreCase) || string.Equals(nameParts[0].Trim(), student.LastName, StringComparison.OrdinalIgnoreCase)))
                     {
                         result.Add(student);
                     }
+                    else if(nameParts.Length == 2 && string.Equals(nameParts[0].Trim(), student.FirstName, StringComparison.OrdinalIgnoreCase) && string.Equals(nameParts[1].Trim(), student.LastName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        result.Add(student);
+                    }
+                }
+                if (result.Count == 0)
+                {
+                    return Result<List<Student>>.Failure(Messages.Error.NoDataFound);
                 }
                 return Result<List<Student>>.Success(result, null);
             }

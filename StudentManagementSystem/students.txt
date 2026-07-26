@@ -1,2 +1,6 @@
 1,1,Sumit Gaur,24,CSE,sumit@gmail.com,1234567890,95
-2,2,Simran Behera,22,CSE,simran@gmail.com,0987654321,95
+2,2,Simran Behera,22,DS,simran@gmail.com,7416622810,95
+4,4,Priya Singh,20,ECE,priya@gmail.com,9123456789,89.5
+5,5,Aman Verma,23,MECH,aman@gmail.com,9988776655,76
+6,6,Neha Reddy,22,IT,neha@gmail.com,9876512345,91
+7,7,Ram Kapoor,32,EEE,ram@gmail.com,9876556789,60

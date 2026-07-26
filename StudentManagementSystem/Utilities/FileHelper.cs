@@ -28,20 +28,23 @@ namespace StudentManagementSystem.Utilities
         }
         public static void Load(string filePath, List<Student> students) 
         {
-            using (StreamReader reader = new StreamReader(filePath))
+            if (File.Exists(filePath))
             {
-                while (!reader.EndOfStream)
+                using (StreamReader reader = new StreamReader(filePath))
                 {
-                    var line = reader.ReadLine();
-                    if (line != null)
+                    while (!reader.EndOfStream)
                     {
-                        var studentDetails = line.Split(",");
-                        Student student = new Student(int.Parse(studentDetails[0].Trim()), studentDetails[2].Split(" ")[0].Trim(), studentDetails[2].Split(" ")[1].Trim(), int.Parse(studentDetails[3].Trim()), int.Parse(studentDetails[1].Trim()), studentDetails[4].Trim(), studentDetails[5].Trim(), studentDetails[6].Trim(), double.Parse(studentDetails[7].Trim()));
-                        students.Add(student);
+                        var line = reader.ReadLine();
+                        if (line != null)
+                        {
+                            var studentDetails = line.Split(",");
+                            Student student = new Student(int.Parse(studentDetails[0].Trim()), studentDetails[2].Split(" ")[0].Trim(), studentDetails[2].Split(" ")[1].Trim(), int.Parse(studentDetails[3].Trim()), int.Parse(studentDetails[1].Trim()), studentDetails[4].Trim(), studentDetails[5].Trim(), studentDetails[6].Trim(), double.Parse(studentDetails[7].Trim()));
+                            students.Add(student);
+                        }
                     }
                 }
+                fileLoadedHandler?.Invoke();
             }
-            fileLoadedHandler?.Invoke();
         }
     }
 }
